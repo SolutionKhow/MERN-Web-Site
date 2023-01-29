@@ -213,9 +213,10 @@ exports.getUserDetail = async (req, res, next) => {
 exports.updatePassword = async (req, res, next) => {
     try {
 
-        const user = await MyUser.findById(req.user.id).select(req.body.oldPassword);
+        const user = await MyUser.findById(req.user.id).select("+password");
+        // console.log(user);
         const isPasswordMatched = await user.comparedPassword(req.body.oldPassword);
-
+        //console.log(isPasswordMatched);
         if (!isPasswordMatched) {
             return next(new ErrorHandler('Old Password is in correct'), 400);
         }
@@ -228,14 +229,14 @@ exports.updatePassword = async (req, res, next) => {
         user.password = req.body.newPassword;
 
         await user.save();
-        sendToken(user, 200, res)
+        sendToken(user, 200, res);
 
 
 
-        res.status(200).json({
-            sucess: true,
-            user,
-        });
+        // res.status(200).json({
+        //     sucess: true,
+        //     user,
+        // });
 
     } catch (error) {
         res.status(404).send(error.message);
@@ -244,12 +245,131 @@ exports.updatePassword = async (req, res, next) => {
 
 
 }
+//---------------------------------------------------------------------------------------------------------------
+
+//Update User Profile
+
+exports.updateProfile = async (req, res, next) => {
+    try {
+
+        const newUserData = {
+            name: req.body.name,
+            email: req.body.email
+        }
+
+        const user = await MyUser.findByIdAndUpdate(req.user.id, newUserData, {
+            new: true,
+            runValidators: true,
+            useFindAndModify: false,
+        });
+
+        res.status(200).json({
+            sucess: true
+        })
 
 
 
 
 
+    } catch (error) {
+        res.status(404).send(error.message);
 
+    }
+}
+//-------------------------------------------------------------------------------------------------------------
+// GET  User By Admin watch
+
+exports.getAllUser = async (req, res, next) => {
+    try {
+        const users = await MyUser.find();
+        res.status(200).json({
+            Sucess: true,
+            users,
+        });
+
+    } catch (error) {
+        res.status(404).send(error.message);
+    }
+
+}
+//------------------------------------------------------------------------------------------------------------------
+// GET  User By Admin watch
+
+exports.getSingleUser = async (req, res, next) => {
+    try {
+        const user = await MyUser.findById(req.params.id);
+        if (!user) {
+            return next(new ErrorHandler(`User Does not exists with id :${req.params.id}`))
+        }
+        res.status(200).json({
+            Sucess: true,
+            user,
+        });
+
+    } catch (error) {
+        res.status(404).send(error.message);
+    }
+
+}
+//-----------------------------------------------------------------------------------------------------------
+//Update USER ROle Admin-------------------------------
+
+exports.updateUserRole = async (req, res, next) => {
+    try {
+
+        const newUserData = {
+            name: req.body.name,
+            email: req.body.email,
+            Role: req.body.Role
+        }
+
+        const user = await MyUser.findByIdAndUpdate(req.params.id, newUserData, {
+            new: true,
+            runValidators: true,
+            useFindAndModify: false,
+        });
+
+        res.status(200).json({
+            sucess: true
+        })
+
+
+
+
+
+    } catch (error) {
+        res.status(404).send(error.message);
+
+    }
+}
+
+//--------------------------------------------------------------------------------------------------------------
+//Delete User ----ADmin-----------------------------------
+exports.deleteUserProfile = async (req, res, next) => {
+    try {
+
+
+        const user = await MyUser.findById(req.params.id)
+
+        if (!user) {
+            return next(new ErrorHandler(`USer does not exist with ${req.params.id}`))
+        }
+
+        await user.remove();
+        res.status(200).json({
+            sucess: true,
+            message:"User Deleted Sucessfully"
+        })
+
+
+
+
+
+    } catch (error) {
+        res.status(404).send(error.message);
+
+    }
+}
 
 
 
