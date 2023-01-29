@@ -38,7 +38,7 @@ exports.registerUser = async (req, res, next) => {
 
 exports.loginUser = async (req, res, next) => {
 
- 
+
 
     try {
 
@@ -164,7 +164,7 @@ exports.resetPassword = async (req, res, next) => {
 
         const resetPasswordTokken = crypto.createHash('sha256').update(req.params.token).digest("hex");
 
-       const user=await  MyUser.findOne({
+        const user = await MyUser.findOne({
             resetPasswordTokken,
             resetPasswordExpire: { $gt: Date.now() },
         });
@@ -192,52 +192,54 @@ exports.resetPassword = async (req, res, next) => {
 //------------------------------------------------------------------------------------
 
 //GET USER   DETAIL
- exports.getUserDetail=async(req,res,next)=>{
+exports.getUserDetail = async (req, res, next) => {
     try {
-        const user= await MyUser.findById(req.user.id);
-    
-       
+        const user = await MyUser.findById(req.user.id);
+
+
         res.status(200).json({
-            sucess:true,
+            sucess: true,
             user,
         });
 
     } catch (error) {
         res.status(404).send(error.message);
     }
- }
+}
 
 //---------------------------------------------------------------------------
 //----UPDATE USER PASSWORD-----
 
-exports.updatePassword=async (req,res,next)=>{
+exports.updatePassword = async (req, res, next) => {
     try {
-        
-     const user=await MyUser.findById(req.user.id).select(req.body.oldPassword);
 
-     if(!isPasswordMatched){
-        return next(new ErrorHandler('Old Password is in correct'),400);
-     }
+        const user = await MyUser.findById(req.user.id).select(req.body.oldPassword);
+        const isPasswordMatched = await user.comparedPassword(req.body.oldPassword);
 
-     if(req.body.newPassword!==req.body.oldPassword){
-        return next(new ErrorHandler('Password does not matched'),400);
+        if (!isPasswordMatched) {
+            return next(new ErrorHandler('Old Password is in correct'), 400);
+        }
 
-        user.password=req.body.newPassword;
+        if (req.body.newPassword !== req.body.confirmPassword) {
+            return next(new ErrorHandler('Password does not matched'), 400);
+
+
+        };
+        user.password = req.body.newPassword;
 
         await user.save();
-        sendToken(user,200,res);
-     }
+        sendToken(user, 200, res)
 
 
 
-     res.status(200).json({
-        sucess:true,
-        user,
-    });
+        res.status(200).json({
+            sucess: true,
+            user,
+        });
 
     } catch (error) {
         res.status(404).send(error.message);
-        
+
     }
 
 
