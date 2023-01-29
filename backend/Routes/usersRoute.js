@@ -14,6 +14,6 @@ routers.route('/logout').get(logout);
 
 routers.route('/me').get(isAuthenticatedUser,getUserDetail);
 
-routers.route('/password/update').put(isAuthenticatedUser,updatePassword);
+routers.route('/password/update').put(updatePassword);
 
 module.exports = routers
