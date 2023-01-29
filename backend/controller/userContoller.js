@@ -207,7 +207,41 @@ exports.resetPassword = async (req, res, next) => {
     }
  }
 
+//---------------------------------------------------------------------------
+//----UPDATE USER PASSWORD-----
 
+exports.updatePassword=async (req,res,next)=>{
+    try {
+        
+     const user=await MyUser.findById(req.user.id).select(req.body.oldPassword);
+
+     if(!isPasswordMatched){
+        return next(new ErrorHandler('Old Password is in correct'),400);
+     }
+
+     if(req.body.newPassword!==req.body.oldPassword){
+        return next(new ErrorHandler('Password does not matched'),400);
+
+        user.password=req.body.newPassword;
+
+        await user.save();
+        sendToken(user,200,res);
+     }
+
+
+
+     res.status(200).json({
+        sucess:true,
+        user,
+    });
+
+    } catch (error) {
+        res.status(404).send(error.message);
+        
+    }
+
+
+}
 
 
 
