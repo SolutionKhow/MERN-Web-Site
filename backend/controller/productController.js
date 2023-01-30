@@ -228,14 +228,14 @@ exports.createProductReview = async (req, res, next) => {
 exports.getProductAllReview = async (req, res, next) => {
     try {
 
-        const product = await MyProduct.findById(req.params.id);
+        const product = await MyProduct.findById(req.query.id);
 
         if (!product) {
             return next(new ErrorHandler("Product not Found", 404));
         }
         res.status(200).json({
             status: true,
-            product
+            reviews: product.reviews
         });
 
 
@@ -250,31 +250,39 @@ exports.getProductAllReview = async (req, res, next) => {
 
 exports.deleteProductReview = async (req, res, next) => {
     try {
-        const product = MyProduct.findById(req.query.productId);
+        const product = await  MyProduct.findById(req.query.productId);
 
         if (!product) {
-            return next(new ErrorHandler("Product not Found"), 404);
+             return next(new ErrorHandler("Product not Found"), 404);
         }
 
-       const reviews=product.reviews.filter(rev=>rev.id.toString()!==req.query.id.toString());
+        // //    const reviews=product.reviews.filter(rev=>rev._id.toString() !==req.query.id.toString());
+        // //    console.log(reviews);
 
-       let avg = 0;
+         const reviews = product.reviews.filter(rev => rev._id.toString() !== req.query.id.toString())
+       
+       
+         let avg = 0;
 
-        reviews.forEach(rev => {
-            avg += rev.rating
-        });
+         reviews.forEach(rev => {
+             avg = avg + rev.rating
+         });
 
         const ratings = avg / reviews.length;
-        const numOfRewies=reviews.length;
-        await product.findByIdAndUpdate(req.query.productId,{
-            reviews,ratings,numOfRewies
-        },
-        {
-            new:true,
-            runValidators:true,
-            useFindAndModify:false
-        }
-        
+        const numOfRewies = reviews.length;
+
+        await MyProduct.findByIdAndUpdate(req.query.productId,
+            {
+                reviews,
+                ratings,
+                numOfRewies
+            },
+            {
+                new: true,
+                runValidators: true,
+                useFindAndModify: false
+            }
+
         );
 
 
@@ -285,6 +293,7 @@ exports.deleteProductReview = async (req, res, next) => {
         res.status(200).json({
             status: true,
             product
+
         });
 
 
