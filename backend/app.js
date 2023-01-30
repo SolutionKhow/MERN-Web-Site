@@ -31,10 +31,12 @@ app.use(bodyParser.json());
 
 const products=require('./Routes/productRoute');
 const Users=require('./Routes/usersRoute');
+const Order=require('./Routes/orderRoute')
 
 
 app.use('/api/v1',products);
 app.use('/api/v1',Users);
+app.use('/api/v1', Order);
 
 
 //Middle for eRROR
