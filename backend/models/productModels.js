@@ -4,21 +4,21 @@ const Validator = require("Validator");
 const productSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: [true,"Please Enter Name"]
-        
+        required: [true, "Please Enter Name"]
+
 
     },
     description: {
         type: String,
-        required: [true,"Please Enter Description"]
+        required: [true, "Please Enter Description"]
     },
     price: {
         type: Number,
-        required: [true,"Please Enter Price"],
+        required: [true, "Please Enter Price"],
         maxLength: [6, "Price Can not exceed 8 Figure"]
 
     },
-    rating: {
+    ratings: {
         type: Number,
         default: 0
     },
@@ -52,6 +52,14 @@ const productSchema = new mongoose.Schema({
     },
     reviews: [
         {
+
+
+            user: {
+                type: mongoose.Schema.ObjectId,
+                ref: "user",
+                required: true
+                
+            },
             name: {
                 type: String,
                 required: true
@@ -67,17 +75,17 @@ const productSchema = new mongoose.Schema({
         },
     ],
 
-   user:{
-    type:mongoose.Schema.ObjectId,
-    ref:"user",
-    required:true,
-   },
+    user: {
+        type: mongoose.Schema.ObjectId,
+        ref: "user",
+        required: true,
+    },
 
 
-    CreatedAt:{
-        type:Date,
-        default:Date.now
+    CreatedAt: {
+        type: Date,
+        default: Date.now
     }
 
 });
-module.exports=mongoose.model("Product",productSchema);
+module.exports = mongoose.model("Product", productSchema);
