@@ -18,13 +18,13 @@ const Footer = () => {
                 <img src={appstore} alt="AppStore" />
 
             </div>
-            <div class="MidFooter">
+            <div className="MidFooter">
                 <h1>E Commerce solution</h1>
                 <p>High Quality is our first Priority</p>
                 <p>Copy Right 2023 </p>
 
             </div>
-            <div class="RightFooter">
+            <div className="RightFooter">
                    <h4>Follow us</h4>
                    <a href='www.youtube.com'>YOU TUBE</a>
                    <a href='www.facebook.com'>FACEBOOK</a>

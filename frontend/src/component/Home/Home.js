@@ -1,8 +1,11 @@
-import React, { Fragment } from 'react';
+import React, { Fragment,useEffect } from 'react';
 import { DiApple } from "react-icons/di";
 import "./Home.css";
 import ProductCard from "./ProductCard.js"
 import Metadata from '../layout/Metadata';
+import {getProduct} from "../../action/productAction";
+import {useSelector,useDispatch } from "react-redux"
+
 const product = {
   name: "Blue Tshirt",
   images:[{url:"https://i.ibb.co./DRST11n/1.webp"}],
@@ -11,6 +14,13 @@ const product = {
 }
 
 const Home = () => {
+
+ const dispatch=useDispatch();
+  useEffect(()=>{
+    dispatch(getProduct());
+  },[dispatch]  );
+
+
   return (
     <Fragment>
       <Metadata title="E COMMERCE"/>
