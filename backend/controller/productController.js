@@ -46,7 +46,9 @@ exports.createProduct = async (req, res, next) => {
 
 exports.getAllProducts = async (req, res) => {
     try {
-        const resultPerPage = 5;
+
+        
+        const resultPerPage = 8;
         const productCount = await MyProduct.countDocuments();
         const MyApifeatures = new Apifeatures(MyProduct.find(), req.query)
             .search()
@@ -55,14 +57,14 @@ exports.getAllProducts = async (req, res) => {
         //const apifeatures=new Apifeatures(MyProduct.find(),req.query).search().filter();
         //console.log(Apifeatures);
         //const products = await MyProduct.find();
-        const products = await MyApifeatures.query;
+        const product = await MyApifeatures.query;
 
         res.status(200).json({
-            message: "Sucess",
-            data: {
-                products,
-                productCount
-            }
+            
+        
+                product,
+                productCount,
+            
         });
     } catch (error) {
         console.log(error.message);

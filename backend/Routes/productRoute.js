@@ -8,7 +8,7 @@ const { authorizedRolls } = require('../middlewware/auth');
 const routers = express.Router();
 
 
-routers.route('/Products').get( getAllProducts);
+routers.route('/Product').get( getAllProducts);
 routers.route('/admin/Products/new').post(isAuthenticatedUser, authorizedRolls('admin'), createProduct);
 routers.route('/admin/Products/:id').put(isAuthenticatedUser, authorizedRolls('admin'), updateProduct).delete(isAuthenticatedUser, authorizedRolls('admin'), deleteProducts);
 

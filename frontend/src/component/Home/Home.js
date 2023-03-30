@@ -1,58 +1,108 @@
-import React, { Fragment,useEffect } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import { DiApple } from "react-icons/di";
 import "./Home.css";
-import ProductCard from "./ProductCard.js"
+import Product from "./Product.js"
 import Metadata from '../layout/Metadata';
-import {getProduct} from "../../action/productAction";
-import {useSelector,useDispatch } from "react-redux"
+import { getProducts } from "../../action/productAction";
+import { useSelector, useDispatch } from "react-redux";
+import Loader from '../layout/Loader/Loader';
+//import { useAlert }  from "react-alert";
 
-const product = {
-  name: "Blue Tshirt",
-  images:[{url:"https://i.ibb.co./DRST11n/1.webp"}],
-  price: 3000,
-  _id: "yogesh"
-}
+// const product={
+//   name:"Bule Shirt",
+//    images:[{url:"https://i.ibb.co/DRST11n/1.webp"}],
+//   price:3000,
+//   _id:"Abhishek "
+
+// }
+
+
+
 
 const Home = () => {
 
- const dispatch=useDispatch();
-  useEffect(()=>{
-    dispatch(getProduct());
-  },[dispatch]  );
+
+  //const alert = useAlert();
+  const dispatch = useDispatch();
+
+  const product = useSelector((state) => state.products.product);
+  const loading=useSelector((state)=>state.products.product);
+  
+ console.log(product,"product");
+  if (Array.isArray(product)) {
+    console.log('product is an array');
+  } else {
+    console.log('product is not an array');
+  }
+
+// const renderList=product.map((myproduct)=>{
+//   const {price,name}=myproduct;
+//   return(<div>
+//     <div>{price}</div>
+//     <div>{name}</div>
+//   </div>);
+  
+// });
 
 
-  return (
-    <Fragment>
-      <Metadata title="E COMMERCE"/>
-      <div className='banner'>
-        <p>Welcome to E Commerce</p>
-        <h1>Find Amazing Product Below</h1>
-        <a href='#container' >
-          <button>Scroll <DiApple />
 
-          </button>
-
-        </a>
-
-      </div>
-
-      <h2 className='homeHeading' > Features Product</h2>
+  useEffect(() => {
+    
+    dispatch(getProducts());
+  }, [dispatch]);
 
 
-      <div className="container" id='container'>
-      <ProductCard product={product}></ProductCard>
-      <ProductCard product={product}></ProductCard>
-      <ProductCard product={product}></ProductCard>
-      <ProductCard product={product}></ProductCard>
-      <ProductCard product={product}></ProductCard>
-      <ProductCard product={product}></ProductCard>
-      <ProductCard product={product}></ProductCard>
-      <ProductCard product={product}></ProductCard>
-      </div>
-    </Fragment>
+  return <Fragment>
 
-  )
-}
+
+
+  
+      <Fragment>
+        <Metadata title="E COmmerce Web Site" ></Metadata>
+        <div className='banner'>
+          <p>Wel Come to E commerce</p>
+          <h1>Find Amazing Product</h1>
+          <a href='#container'>
+            <button>
+              Scroll<DiApple />
+            </button>
+          </a>
+        </div>
+        <h2 className="homeHeading">Featured Products</h2>
+
+
+        <div className="container" id='container'>
+
+
+
+      
+         {product.map((products) => (
+            <Product key={products._id} products={products} />
+          ))} 
+             
+
+
+
+          {/* <ProductCard product={product}/>
+          <ProductCard product={product}/>
+          <ProductCard product={product}/>
+          <ProductCard product={product}/>
+          <ProductCard product={product}/>
+          <ProductCard product={product}/>
+          <ProductCard product={product}/>
+          <ProductCard product={product}/>  */}
+
+
+        </div>
+      </Fragment>
+    
+
+  </Fragment>
+
+
+
+
+};
 
 export default Home
 
