@@ -5,7 +5,7 @@ import Product from "./Product.js"
 import Metadata from '../layout/Metadata';
 import { getProducts } from "../../action/productAction";
 import { useSelector, useDispatch } from "react-redux";
-import Loader from '../layout/Loader/Loader';
+
 //import { useAlert }  from "react-alert";
 
 // const product={
@@ -26,37 +26,38 @@ const Home = () => {
   const dispatch = useDispatch();
 
   const product = useSelector((state) => state.products.product);
-  const loading=useSelector((state)=>state.products.product);
-  
- console.log(product,"product");
+ 
+ 
+
+  console.log(product, "product");
   if (Array.isArray(product)) {
     console.log('product is an array');
   } else {
     console.log('product is not an array');
   }
 
-// const renderList=product.map((myproduct)=>{
-//   const {price,name}=myproduct;
-//   return(<div>
-//     <div>{price}</div>
-//     <div>{name}</div>
-//   </div>);
-  
-// });
+  // const renderList=product.map((myproduct)=>{
+  //   const {price,name}=myproduct;
+  //   return(<div>
+  //     <div>{price}</div>
+  //     <div>{name}</div>
+  //   </div>);
+
+  // });
 
 
 
   useEffect(() => {
-    
+
     dispatch(getProducts());
   }, [dispatch]);
 
 
   return <Fragment>
 
+    
 
-
-  
+     
       <Fragment>
         <Metadata title="E COmmerce Web Site" ></Metadata>
         <div className='banner'>
@@ -75,27 +76,18 @@ const Home = () => {
 
 
 
-      
-         {product.map((products) => (
+
+          { product.map((products) => (
             <Product key={products._id} products={products} />
-          ))} 
-             
+          ))}
 
 
 
-          {/* <ProductCard product={product}/>
-          <ProductCard product={product}/>
-          <ProductCard product={product}/>
-          <ProductCard product={product}/>
-          <ProductCard product={product}/>
-          <ProductCard product={product}/>
-          <ProductCard product={product}/>
-          <ProductCard product={product}/>  */}
 
-
+ 
         </div>
       </Fragment>
-    
+
 
   </Fragment>
 
